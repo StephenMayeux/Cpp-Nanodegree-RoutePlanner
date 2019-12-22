@@ -53,6 +53,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 // - Remove that node from the open_list.
 // - Return the pointer.
 
+// use the compare function from the lessons here.
 RouteModel::Node *RoutePlanner::NextNode() {
     std::sort(open_list.begin(), open_list.end(), [](const auto *a, const auto *b) {
         float f1 = a->h_value + a->g_value;
@@ -85,6 +86,7 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
         distance += current_node->distance(*(current_node->parent));
         current_node = current_node->parent;
     }
+    // instead of using insert() no the vector, use push and then reverse it so that it goes end to start node
     std::reverse(path_found.begin(), path_found.end());
     distance *= m_Model.MetricScale();
     return path_found;
@@ -101,6 +103,7 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = start_node;
 
+    // initial data for the starting node
     current_node->visited = true;
     current_node->g_value = 0.0;
     current_node->h_value = CalculateHValue(current_node);
@@ -110,7 +113,6 @@ void RoutePlanner::AStarSearch() {
         current_node = NextNode();
         if (current_node->distance(*end_node) == 0) {
             m_Model.path = ConstructFinalPath(current_node);
-            return;
         } else {
             AddNeighbors(current_node);
         }
