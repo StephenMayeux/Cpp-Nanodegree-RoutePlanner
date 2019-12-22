@@ -1,8 +1,3 @@
-*.swp
-*.osm
-*.o
-draw.cpp
-test.cpp
 build/
-bin/
 lib/
+.vscode
